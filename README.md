@@ -1,5 +1,7 @@
 # A Game of Menagerie
-This is a game of Menagerie built for a programming final project for first semester of university. 
+This is a game of Menagerie built in C++.
+
+#### This was made as the Programming Fundamentals final project for my first semester of bachelors. 
 
 <h2> How to use: </h2>
 <li> Clone repository.
