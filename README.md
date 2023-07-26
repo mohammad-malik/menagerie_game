@@ -1,5 +1,5 @@
 # A Game of Menagerie
-This is a game of Menagerie built in C++.
+This is a game of Menagerie built in C++ using SFML/Graphics.
 
 #### This was made as the Programming Fundamentals final project for my first semester of bachelors. 
 
