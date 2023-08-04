@@ -1,10 +1,14 @@
-all: command build run
+all: delete command compile run
+
+delete:
+	rm -rf *.o game-normal
 
 command:
 	g++ -c main.cpp
 
-build:
-	g++ main.o -o game-normal -lsfml-graphics -lsfml-window -lsfml-system
+compile:
+	g++ main.o -o game-normal -lsfml-graphics -lsfml-window -lsfml-system	
 
 run:
 	./game-normal
+	
