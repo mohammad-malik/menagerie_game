@@ -12,4 +12,4 @@ This is a game of Menagerie built in C++ using SFML/Graphics.
 <li> G++ Compiler</li>
 <li> A Linux terminal environment (WSL works too)</li>
 <li> SFML (libsfml-dev) </li>
-<li> Makefile (or alternatively, run the four commands in the makefile </li>
+<li> Makefile (or alternatively, run the four commands in the makefile) </li>
