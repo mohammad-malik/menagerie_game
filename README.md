@@ -1,7 +1,7 @@
 # A Game of Menagerie
 This is a game of Menagerie built in C++ using SFML/Graphics.
 
-#### This was made as the Programming Fundamentals final project for my first semester of bachelors. Any updates after are mentioned, and I have tried my best to maintain the project to its original vision and restraints
+#### This was our Programming Fundamentals final project for our first semester of bachelor's in Data Science at NUCES FAST. Any updates after are mentioned, and we have tried our best to maintain the project to its original vision and restraints. That is why there are no updates changing the core mechanics — or functionality — only what was allowed to us at the time is what is used.
 
 <h2> How to use: </h2>
 <li> Clone repository.
