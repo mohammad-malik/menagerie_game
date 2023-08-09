@@ -18,9 +18,9 @@ int main()
 	Sprite menu_background(menuBackground_texture), normalButton_sprite(normalButton_texture), timedButton_sprite(timedButton_texture), helpButton_sprite(helpButton_texture), quitButton_sprite(quitButton_texture);
 
 	normalButton_sprite.setPosition(309, 200);
-	timedButton_sprite.setPosition(324, 250);
-	helpButton_sprite.setPosition(334, 300);
-	quitButton_sprite.setPosition(337, 350);
+	timedButton_sprite.setPosition(323, 250);
+	helpButton_sprite.setPosition(333, 300);
+	quitButton_sprite.setPosition(336, 350);
 
 	// Initiates event checker
 	Event gameEvent;
@@ -56,21 +56,55 @@ int main()
 
 					Sprite backgroundSprite(background);
 
-					Text helpText("Hello and welcome to Menageire!\nIn this section, we will take you through the rules and basic \nintrouction of the game. So, lets start with the rows:\n1. It is a single player game.\n2. You NEED to match at least 3 tiles together to get points.\n3. If you match 3 tiles, you will get 10 points, if you match 5 tiles,\nyou will get 50 points.\n4. Invalid moves will NOT be allowed.\n\n\nWe hope that this helps you in playing this game.\n\n\nThank You!", gameFont, 24);
+					Texture backButton_texture;
+					backButton_texture.loadFromFile("sprites/Back.png");
+					Sprite backButton_sprite(backButton_texture);
+					backButton_sprite.setPosition(335, 380);
+					
+					Text titleText("Hello and welcome to Menageire!", gameFont, 36);
+					titleText.setFillColor(Color::Yellow);
+					titleText.setPosition(105, 10);
+
+					Text helpText("In this section, we will take you through the rules and basic \nintrouction of the game. So, here are the rules:\n", gameFont, 24);
 					helpText.setFillColor(Color::White);
-					helpText.setPosition(10, 10);
+					helpText.setPosition(10, 80);
+					
+					Text instructions("1. This is a single player game.\n2. You NEED to match at least 3 tiles together to get points.\n3. If you match 3 tiles, you will get 10 points, if you match 4 tiles,\nyou will get 20 points, and so on.\n4. Invalid moves will be reverted.", gameFont, 24);
+					instructions.setFillColor(Color::Yellow);
+					instructions.setPosition(10, 150);
+
+					Text thankYou("We hope that this helps you in playing this game. Thank You!", gameFont, 24);
+					thankYou.setFillColor(Color::White);
+					thankYou.setPosition(10, 300);
 
 					// Game loop
 					while (window.isOpen())
 					{
 						// Process events
-						while (window.pollEvent(gameEvent))
+						Event event;
+						while (window.pollEvent(event))
 						{
-							if (gameEvent.type == Event::Closed)
+							// Close window: exit
+							if (event.type == Event::Closed)
 								window.close();
+
+							if (event.type == Event::MouseButtonReleased && event.mouseButton.button == Mouse::Left)
+							{
+								Vector2i mousePos = Mouse::getPosition(window);
+								if (backButton_sprite.getGlobalBounds().contains(mousePos.x, mousePos.y))
+								{
+									window.close();
+									main();
+								}
+							}
 						}
+
 						window.draw(backgroundSprite);
+						window.draw(titleText);
 						window.draw(helpText);
+						window.draw(instructions);
+						window.draw(thankYou);
+						window.draw(backButton_sprite);
 						window.display();
 					}
 				}
@@ -196,7 +230,7 @@ int main()
 						matchSpecies(gridSpecies, matchedCount, score);
 
 						// Checking if there are any possible moves left
-						if ((anyPossibleMoves(gridSpecies, score) == false))
+						if (anyPossibleMoves(gridSpecies, score) == false)
 						{
 							// Showing game over screen
 							game_normal.close();
@@ -210,6 +244,16 @@ int main()
 							backButton_texture.loadFromFile("sprites/Back.png");
 							Sprite backButton_sprite(backButton_texture);
 							backButton_sprite.setPosition(335, 300);
+
+															// drawing the "game over" text
+							Text gameOverText("Game Over", gameFont, 48);
+							gameOverText.setFillColor(Color::Blue);
+							gameOverText.setPosition(272, 160);
+
+							// drawing the final score
+							Text finalScoreText("Final Score: " + to_string(score), gameFont, 36);
+							finalScoreText.setFillColor(Color::White);
+							finalScoreText.setPosition(266, 220);
 
 							// Game loop
 							while (gameOverWindow.isOpen())
@@ -230,15 +274,6 @@ int main()
 										}
 									}
 								}
-								// drawing the "game over" text
-								Text gameOverText("Game Over", gameFont, 36);
-								gameOverText.setFillColor(Color::Blue);
-								gameOverText.setPosition(292, 200);
-
-								// drawing the final score
-								Text finalScoreText("Final Score: " + to_string(score), gameFont, 24);
-								finalScoreText.setFillColor(Color::White);
-								finalScoreText.setPosition(297, 240);
 
 								// Drawing text
 								gameOverWindow.draw(background_sprite);
@@ -552,6 +587,16 @@ int main()
 							Sprite backButton_sprite(backButton_texture);
 							backButton_sprite.setPosition(335, 300);
 
+							// drawing the "game over" text
+							Text gameOverText("Game Over", gameFont, 48);
+							gameOverText.setFillColor(Color::Blue);
+							gameOverText.setPosition(272, 160);
+
+							// drawing the final score
+							Text finalScoreText("Final Score: " + to_string(score), gameFont, 36);
+							finalScoreText.setFillColor(Color::White);
+							finalScoreText.setPosition(266, 220);
+
 							// Game loop
 							while (gameOverWindow.isOpen())
 							{
@@ -571,15 +616,6 @@ int main()
 										}
 									}
 								}
-								// drawing the "game over" text
-								Text gameOverText("Game Over", gameFont, 36);
-								gameOverText.setFillColor(Color::Blue);
-								gameOverText.setPosition(292, 200);
-
-								// drawing the final score
-								Text finalScoreText("Final Score: " + to_string(score), gameFont, 24);
-								finalScoreText.setFillColor(Color::White);
-								finalScoreText.setPosition(297, 240);
 
 								// Drawing text
 								gameOverWindow.draw(background_sprite);
@@ -634,9 +670,66 @@ int main()
 
 						for (int i = 0; i < 7; i++)
 						{
-							if ((matchedCount[i]) >= speciesRepo[i])
+							// If the player has collected all the species, Game
+							if (matchedCount[i] >= speciesRepo[i])
 							{
 								game_timed.close();
+
+								// geting the winning animal and showing it on the screen
+								Texture winningAnimal_texture;
+								winningAnimal_texture.loadFromFile("sprites/animals.png");
+								Sprite winningAnimal_sprite(winningAnimal_texture);
+								winningAnimal_sprite.setTextureRect(IntRect(49 * i, 0, 50, 50));
+								winningAnimal_sprite.setPosition(342, 150);
+							
+								// drawing the final score
+								Text finalScoreText("Final Score: " + to_string(score), gameFont, 24);
+								finalScoreText.setFillColor(Color::White);
+								finalScoreText.setPosition(295, 240);
+
+								// drawing the "you win" text
+								Text youWinText("You Win!", gameFont, 36);
+								youWinText.setFillColor(Color::Yellow);
+								youWinText.setPosition(305, 200);
+
+								// creating the back button
+								Texture backButton_texture;
+								backButton_texture.loadFromFile("sprites/Back.png");
+								Sprite backButton_sprite(backButton_texture);
+								backButton_sprite.setPosition(335, 300);
+
+								// creating new window
+								RenderWindow winWindow(VideoMode(740, 480), "Final Score");
+								winWindow.setFramerateLimit(60);
+								
+								// Game loop
+								while (winWindow.isOpen())
+								{
+									while (winWindow.pollEvent(gameEvent))
+								{
+									if (gameEvent.type == Event::Closed)
+										winWindow.close();
+
+									if (gameEvent.type == Event::MouseButtonReleased && gameEvent.mouseButton.button == Mouse::Left)
+									{
+										Vector2i mousePos = Mouse::getPosition(winWindow);
+										if (backButton_sprite.getGlobalBounds().contains(mousePos.x, mousePos.y))
+										{
+											winWindow.close();
+											main();
+										}
+									}
+								}
+									
+									// Drawing text
+									winWindow.draw(background_sprite);
+									winWindow.draw(finalScoreText);
+									winWindow.draw(youWinText);
+									winWindow.draw(backButton_sprite);
+									winWindow.draw(winningAnimal_sprite);
+									winWindow.display();
+								}
+
 								main();
 							}
 						}

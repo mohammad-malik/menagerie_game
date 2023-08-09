@@ -96,7 +96,7 @@ void removeTilesVertical(int gridSpecies[9][8], int row, int col, int count)
 	}
 }
 
-bool matchSpecies(int gridSpecies[9][8], int matchedCount[7], int &score, bool del = true)
+bool matchSpecies(int gridSpecies[9][8], int matchedCount[7], int &score, bool isDeleted = true)
 {
 	// Declaring check variable
 	bool validSwap = false;
@@ -109,15 +109,14 @@ bool matchSpecies(int gridSpecies[9][8], int matchedCount[7], int &score, bool d
 			// Checking for 3 or more tiles of the same species in a row
 			int count = 1;
 			while (col + count < 8 && gridSpecies[row][col] == gridSpecies[row][col + count])
-			{
 				count++;
-			}
+
 			// If there are 3 or more tiles of the same species in a row, they are removed
 			if (count >= 3)
 			{
-				if (del)
+				if (isDeleted)
 				{
-					score += 10 * count;								 // Adding to the score
+					score += (10 * (count - 2));								 // Adding to the score
 					matchedCount[gridSpecies[row][col]] += count * 100;	 // Adding to the matched count
 					removeTilesHorizontal(gridSpecies, row, col, count); // Removing the tiles
 				}
@@ -137,9 +136,9 @@ bool matchSpecies(int gridSpecies[9][8], int matchedCount[7], int &score, bool d
 
 			if (count >= 3)
 			{
-				if (del)
+				if (isDeleted)
 				{
-					score += 10 * count;
+					score += (10 * (count - 2));
 					matchedCount[gridSpecies[row][col]] += count * 100;
 					removeTilesVertical(gridSpecies, row, col, count);
 				}
@@ -160,9 +159,7 @@ bool anyPossibleMoves(int gridSpecies[9][8], int &score)
 	for (int row = 0; row < 9; row++)
 	{
 		for (int col = 0; col < 8; col++)
-		{
 			copyGridSpecies[row][col] = gridSpecies[row][col];
-		}
 	}
 
 	// Checking if there are any possible moves
@@ -176,13 +173,9 @@ bool anyPossibleMoves(int gridSpecies[9][8], int &score)
 				// Swapping the tiles
 				swapTiles(copyGridSpecies, row, row, col, col + 1);
 				if (matchSpecies(copyGridSpecies, 0, score, false))
-				{
 					return true;
-				}
 				else
-				{
 					swapTiles(copyGridSpecies, row, row, col, col + 1);
-				}
 			}
 			// Checking if the tile is not on the rightmost column
 			if (col - 1 >= 0)
@@ -190,13 +183,9 @@ bool anyPossibleMoves(int gridSpecies[9][8], int &score)
 				// Swapping the tiles
 				swapTiles(copyGridSpecies, row, row, col, col - 1);
 				if (matchSpecies(copyGridSpecies, 0, score, false))
-				{
 					return true;
-				}
 				else
-				{
 					swapTiles(copyGridSpecies, row, row, col, col - 1);
-				}
 			}
 			// Checking if the tile is not on the topmost row
 			if (row - 1 >= 0)
