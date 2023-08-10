@@ -8,11 +8,11 @@ int main()
 	// Declaring textures
 	Texture menuBackground_texture, normalButton_texture, timedButton_texture, helpButton_texture, quitButton_texture;
 
-	menuBackground_texture.loadFromFile("sprites/Menu_Background.png");
-	normalButton_texture.loadFromFile("sprites/Normal.png");
-	timedButton_texture.loadFromFile("sprites/Timed.png");
-	helpButton_texture.loadFromFile("sprites/Help.png");
-	quitButton_texture.loadFromFile("sprites/Quit.png");
+	menuBackground_texture.loadFromFile("assets/textures/Menu_Background.png");
+	normalButton_texture.loadFromFile("assets/textures/Normal.png");
+	timedButton_texture.loadFromFile("assets/textures/Timed.png");
+	helpButton_texture.loadFromFile("assets/textures/Help.png");
+	quitButton_texture.loadFromFile("assets/textures/Quit.png");
 
 	// Creating sprites
 	Sprite menu_background(menuBackground_texture), normalButton_sprite(normalButton_texture), timedButton_sprite(timedButton_texture), helpButton_sprite(helpButton_texture), quitButton_sprite(quitButton_texture);
@@ -22,6 +22,16 @@ int main()
 	helpButton_sprite.setPosition(333, 300);
 	quitButton_sprite.setPosition(336, 350);
 
+	// Load music file
+    Music mainMenuMusic;
+
+    if (!mainMenuMusic.openFromFile("assets/music/8-bit-arcade-moodmode.mp3"))
+        return -1;
+
+	mainMenuMusic.setLoop(true);
+	mainMenuMusic.setVolume(50);
+    mainMenuMusic.play();
+
 	// Initiates event checker
 	Event gameEvent;
 
@@ -29,9 +39,14 @@ int main()
 	{
 		while (mainMenu.pollEvent(gameEvent)) // Checks for events and start loop
 		{
-			if (gameEvent.type == Event::Closed) // for close button
+			// closes window if close button is pressed
+			if (gameEvent.type == Event::Closed)
+			{
 				mainMenu.close();
+				return 0;
+			}
 
+			// checking if mouse is clicked anywhere else
 			if (gameEvent.type == Event::MouseButtonReleased && gameEvent.mouseButton.button == Mouse::Left)
 			{
 				Vector2i mousePos = Mouse::getPosition(mainMenu);
@@ -44,20 +59,21 @@ int main()
 				if (helpButton_sprite.getGlobalBounds().contains(mousePos.x, mousePos.y))
 				{
 					mainMenu.close();
+					mainMenuMusic.stop();
 
 					RenderWindow window(VideoMode(740, 480), "Help ");
 
 					// Rendering game content (text, background)
 					Font gameFont;
-					gameFont.loadFromFile("sprites/Font/Digitalt.ttf");
+					gameFont.loadFromFile("assets/font/Digitalt.ttf");
 
 					Texture background;
-					background.loadFromFile("sprites/background.png");
+					background.loadFromFile("assets/background.png");
 
 					Sprite backgroundSprite(background);
 
 					Texture backButton_texture;
-					backButton_texture.loadFromFile("sprites/Back.png");
+					backButton_texture.loadFromFile("assets/textures/Back.png");
 					Sprite backButton_sprite(backButton_texture);
 					backButton_sprite.setPosition(335, 380);
 					
@@ -76,6 +92,15 @@ int main()
 					Text thankYou("We hope that this helps you in playing this game. Thank You!", gameFont, 24);
 					thankYou.setFillColor(Color::White);
 					thankYou.setPosition(10, 300);
+
+					Music helpMusic;
+
+					if (!helpMusic.openFromFile("assets/music/8-bit-dream-land-moodmode.mp3"))
+						return -1;
+
+					helpMusic.setLoop(true);
+					helpMusic.setVolume(50);
+					helpMusic.play();
 
 					// Game loop
 					while (window.isOpen())
@@ -133,17 +158,17 @@ int main()
 					game_normal.setFramerateLimit(60);
 
 					Texture bg_texture, animal_textures, cursor_texture, level_texture;
-					bg_texture.loadFromFile("sprites/background.png");
-					animal_textures.loadFromFile("sprites/animals.png");
-					cursor_texture.loadFromFile("sprites/cursor.png");
-					level_texture.loadFromFile("sprites/Level_Base.png");
+					bg_texture.loadFromFile("assets/textures/background.png");
+					animal_textures.loadFromFile("assets/animals.png");
+					cursor_texture.loadFromFile("assets/textures/cursor.png");
+					level_texture.loadFromFile("assets/textures/Level_Base.png");
 
 					// Creating sprite
 					Sprite background_sprite(bg_texture), animal_sprite(animal_textures), cursor_sprite(cursor_texture), level_sprite(level_texture);
 					level_sprite.setPosition(584, 12);
 
 					Font gameFont;
-					gameFont.loadFromFile("sprites/Font/Digitalt.ttf");
+					gameFont.loadFromFile("assets/font/Digitalt.ttf");
 
 					Text scoreText("Score: " + to_string(score), gameFont, 24);
 					scoreText.setFillColor(Color::White);
@@ -156,6 +181,15 @@ int main()
 					// Variables for detecting mouse click and calculating col and row of click tile
 					int column1, column2, row1, row2, clickNumber = 0, scoreLimit = 1000;
 					Vector2i position;
+
+					Music normalGameMusic;
+
+					if (!normalGameMusic.openFromFile("assets/music/8-bit-arcade-moodmode.mp3"))
+						return -1;
+					
+					normalGameMusic.setLoop(true);
+					normalGameMusic.setVolume(50);
+					normalGameMusic.play();
 
 					// Game loop
 					while (game_normal.isOpen())
@@ -234,6 +268,7 @@ int main()
 						{
 							// Showing game over screen
 							game_normal.close();
+							normalGameMusic.stop();
 
 							// creating new window
 							RenderWindow gameOverWindow(VideoMode(740, 480), "Game Over");
@@ -241,11 +276,11 @@ int main()
 
 							// creating sprite for back button
 							Texture backButton_texture;
-							backButton_texture.loadFromFile("sprites/Back.png");
+							backButton_texture.loadFromFile("assets/textures/Back.png");
 							Sprite backButton_sprite(backButton_texture);
 							backButton_sprite.setPosition(335, 300);
 
-															// drawing the "game over" text
+							// drawing the "game over" text
 							Text gameOverText("Game Over", gameFont, 48);
 							gameOverText.setFillColor(Color::Blue);
 							gameOverText.setPosition(272, 160);
@@ -254,6 +289,15 @@ int main()
 							Text finalScoreText("Final Score: " + to_string(score), gameFont, 36);
 							finalScoreText.setFillColor(Color::White);
 							finalScoreText.setPosition(266, 220);
+
+							// gameover audio
+							Music gameOverMusic;
+							
+							if (!gameOverMusic.openFromFile("assets/music/8-bit-arcade-moodmode.mp3"))
+								return -1;
+
+							gameOverMusic.play();
+							gameOverMusic.setVolume(50);
 
 							// Game loop
 							while (gameOverWindow.isOpen())
@@ -270,6 +314,7 @@ int main()
 										if (backButton_sprite.getGlobalBounds().contains(mousePos.x, mousePos.y))
 										{
 											gameOverWindow.close();
+											gameOverMusic.stop();
 											main();
 										}
 									}
@@ -303,9 +348,9 @@ int main()
 						// Loading progress bars
 						for (int i = 0; i < 7; i++)
 						{
-							barBase_textures[i].loadFromFile("sprites/progress_base.png");
-							barOverlay_textures[i].loadFromFile("sprites/pb_fill.png");
-							barSpecies_textures[i].loadFromFile("sprites/animals.png");
+							barBase_textures[i].loadFromFile("assets/progress_base.png");
+							barOverlay_textures[i].loadFromFile("assets/pb_fill.png");
+							barSpecies_textures[i].loadFromFile("assets/animals.png");
 						}
 
 						// Creating sprites using loaded textures
@@ -343,7 +388,7 @@ int main()
 
 								// geting the winning animal and showing it on the screen
 								Texture winningAnimal_texture;
-								winningAnimal_texture.loadFromFile("sprites/animals.png");
+								winningAnimal_texture.loadFromFile("assets/textures/animals.png");
 								Sprite winningAnimal_sprite(winningAnimal_texture);
 								winningAnimal_sprite.setTextureRect(IntRect(49 * i, 0, 50, 50));
 								winningAnimal_sprite.setPosition(342, 150);
@@ -360,7 +405,7 @@ int main()
 
 								// creating the back button
 								Texture backButton_texture;
-								backButton_texture.loadFromFile("sprites/Back.png");
+								backButton_texture.loadFromFile("assets/textures/Back.png");
 								Sprite backButton_sprite(backButton_texture);
 								backButton_sprite.setPosition(335, 300);
 
@@ -455,17 +500,17 @@ int main()
 					game_timed.setFramerateLimit(60);
 
 					Texture bg_texture, animal_textures, cursor_texture, level_texture;
-					bg_texture.loadFromFile("sprites/background.png");
-					animal_textures.loadFromFile("sprites/animals.png");
-					cursor_texture.loadFromFile("sprites/cursor.png");
-					level_texture.loadFromFile("sprites/Level_Base.png");
+					bg_texture.loadFromFile("assets/textures/background.png");
+					animal_textures.loadFromFile("assets/animals.png");
+					cursor_texture.loadFromFile("assets/textures/cursor.png");
+					level_texture.loadFromFile("assets/textures/Level_Base.png");
 
 					// Creating sprite
 					Sprite background_sprite(bg_texture), animal_sprite(animal_textures), cursor_sprite(cursor_texture), timerBackground_sprite(level_texture);
 					timerBackground_sprite.setPosition(584, 12);
 
 					Font gameFont;
-					gameFont.loadFromFile("sprites/Font/Digitalt.ttf");
+					gameFont.loadFromFile("assets/font/Digitalt.ttf");
 
 					Text scoreText("Score: " + to_string(score), gameFont, 24);
 					scoreText.setFillColor(Color::White);
@@ -481,6 +526,14 @@ int main()
 					// Variables for detecting mouse click and calculating col and row of click tile
 					int column1, column2, row1, row2, clickNumber = 0;
 					Vector2i position;
+
+					Music timedGameMusic;
+					
+					if (!(timedGameMusic.openFromFile("assets/sounds/party-event-moodmode.mp3")))
+						return -1;
+						
+					timedGameMusic.setVolume(50);
+					timedGameMusic.play();
 
 					// Game loop
 					while (game_timed.isOpen())
@@ -576,6 +629,7 @@ int main()
 						{
 							// Showing game over screen
 							game_timed.close();
+							timedGameMusic.stop();
 
 							// creating new window
 							RenderWindow gameOverWindow(VideoMode(740, 480), "Game Over");
@@ -583,7 +637,7 @@ int main()
 
 							// creating sprite for back button
 							Texture backButton_texture;
-							backButton_texture.loadFromFile("sprites/Back.png");
+							backButton_texture.loadFromFile("assets/textures/Back.png");
 							Sprite backButton_sprite(backButton_texture);
 							backButton_sprite.setPosition(335, 300);
 
@@ -596,6 +650,15 @@ int main()
 							Text finalScoreText("Final Score: " + to_string(score), gameFont, 36);
 							finalScoreText.setFillColor(Color::White);
 							finalScoreText.setPosition(266, 220);
+
+							// gameover audio
+							Music gameOverMusic;
+							
+							if (!(gameOverMusic.openFromFile("assets/audio/faint-courage-toby-fox.mp3")))
+								return -1;
+							
+							gameOverMusic.play();
+							gameOverMusic.setVolume(50);
 
 							// Game loop
 							while (gameOverWindow.isOpen())
@@ -612,6 +675,7 @@ int main()
 										if (backButton_sprite.getGlobalBounds().contains(mousePos.x, mousePos.y))
 										{
 											gameOverWindow.close();
+											gameOverMusic.stop();
 											main();
 										}
 									}
@@ -637,9 +701,9 @@ int main()
 						// Loading progress bars
 						for (int i = 0; i < 7; i++)
 						{
-							barBase_textures[i].loadFromFile("sprites/progress_base.png");
-							barOverlay_textures[i].loadFromFile("sprites/pb_fill.png");
-							barSpecies_textures[i].loadFromFile("sprites/animals.png");
+							barBase_textures[i].loadFromFile("assets/progress_base.png");
+							barOverlay_textures[i].loadFromFile("assets/pb_fill.png");
+							barSpecies_textures[i].loadFromFile("assets/animals.png");
 						}
 
 						// Creating sprites using loaded textures
@@ -677,7 +741,7 @@ int main()
 
 								// geting the winning animal and showing it on the screen
 								Texture winningAnimal_texture;
-								winningAnimal_texture.loadFromFile("sprites/animals.png");
+								winningAnimal_texture.loadFromFile("assets/textures/animals.png");
 								Sprite winningAnimal_sprite(winningAnimal_texture);
 								winningAnimal_sprite.setTextureRect(IntRect(49 * i, 0, 50, 50));
 								winningAnimal_sprite.setPosition(342, 150);
@@ -694,7 +758,7 @@ int main()
 
 								// creating the back button
 								Texture backButton_texture;
-								backButton_texture.loadFromFile("sprites/Back.png");
+								backButton_texture.loadFromFile("assets/textures/Back.png");
 								Sprite backButton_sprite(backButton_texture);
 								backButton_sprite.setPosition(335, 300);
 
