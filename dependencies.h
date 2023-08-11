@@ -9,13 +9,9 @@ int absVal(int value)
 {
 	// returning absolute value
 	if (value < 0)
-	{
 		return -value;
-	}
 	else
-	{
 		return value;
-	}
 }
 
 int calcBarWidth(int matchedCount, int maxSpecies)
@@ -30,15 +26,12 @@ int calcBarWidth(int matchedCount, int maxSpecies)
 
 void swapTiles(int gridSpecies[9][8], int row1, int row2, int col1, int col2)
 {
-	int temp;
-
-	// swapping the species of the species array in the grid
-	temp = gridSpecies[row1][col1];
+	int temp = gridSpecies[row1][col1];
 	gridSpecies[row1][col1] = gridSpecies[row2][col2];
 	gridSpecies[row2][col2] = temp;
 }
 
-void populateGrid(int tileSize, int gridXPos[9][8], int gridYPos[9][8], int gridRow[9][8], int gridCol[9][8], int gridSpecies[9][8])
+void populateGrid(int tileSize, int gridXPosition[9][8], int gridYPosition[9][8], int gridRow[9][8], int gridCol[9][8], int gridSpecies[9][8])
 {
 	// seeding rand function
 	srand(time(0));
@@ -48,11 +41,11 @@ void populateGrid(int tileSize, int gridXPos[9][8], int gridYPos[9][8], int grid
 	{
 		for (int col = 0; col < 8; col++)
 		{
-			gridXPos[row][col] = col * tileSize; // setting the x position of every tile
-			gridYPos[row][col] = row * tileSize; // setting the y position of every tile
-			gridRow[row][col] = row;			 // setting the row number of every tile
-			gridCol[row][col] = col;			 // setting the column number of every tile
-			gridSpecies[row][col] = rand() % 7;	 // setting the animal species of every tile
+			gridXPosition[row][col] = col * tileSize;
+			gridYPosition[row][col] = row * tileSize;
+			gridRow[row][col] = row;
+			gridCol[row][col] = col;
+			gridSpecies[row][col] = rand() % 7;	 // setting a random animal species of every tile
 		}
 	}
 }
@@ -65,14 +58,11 @@ void removeTilesHorizontal(int gridSpecies[9][8], int row, int col, int count)
 		{
 			// After shifting the tiles, the top row is filled with random species
 			if (r == 0)
-			{
 				gridSpecies[r][c] = rand() % 7;
-			}
+			
 			// Shifting the tiles
 			else
-			{
 				gridSpecies[r][c] = gridSpecies[r - 1][c];
-			}
 		}
 	}
 }
@@ -85,14 +75,11 @@ void removeTilesVertical(int gridSpecies[9][8], int row, int col, int count)
 		{
 			// After shifting the tiles, the top row is filled with random species
 			if (r == 0)
-			{
 				gridSpecies[r][col] = rand() % 7;
-			}
+			
 			// Shifting the tiles
 			else
-			{
 				gridSpecies[r][col] = gridSpecies[r - 1][col];
-			}
 		}
 	}
 }

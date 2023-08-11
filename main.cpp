@@ -39,10 +39,14 @@ int main()
 	{
 		while (mainMenu.pollEvent(gameEvent)) // Checks for events and start loop
 		{
-			if (gameEvent.type == Event::Closed) // for close button
+			 // for close button
+			if (gameEvent.type == Event::Closed)
+			{
 				mainMenu.close();
+				return 0;
+			}
 
-			if (gameEvent.type == Event::MouseButtonReleased && gameEvent.mouseButton.button == Mouse::Left)
+			if ((gameEvent.type == Event::MouseButtonReleased) && (gameEvent.mouseButton.button == Mouse::Left))
 			{
 				Vector2i mousePos = Mouse::getPosition(mainMenu);
 				if (quitButton_sprite.getGlobalBounds().contains(mousePos.x, mousePos.y))
@@ -176,7 +180,7 @@ int main()
 					levelText.setPosition(608, 12);
 
 					// Variables for detecting mouse click and calculating col and row of click tile
-					int column1, column2, row1, row2, clickNumber = 0, scoreLimit = 1000;
+					int column1, column2, row1, row2, clickNumber = 0, scoreLimit = 200;
 					Vector2i position;
 
 					Music normalGameMusic;
@@ -444,8 +448,6 @@ int main()
 									winWindow.draw(winningAnimal_sprite);
 									winWindow.display();
 								}
-
-								main();
 							}
 						}
 
@@ -807,8 +809,6 @@ int main()
 									winWindow.draw(winningAnimal_sprite);
 									winWindow.display();
 								}
-
-								main();
 							}
 						}
 
