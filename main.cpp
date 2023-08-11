@@ -8,11 +8,11 @@ int main()
 	// Declaring textures
 	Texture menuBackground_texture, normalButton_texture, timedButton_texture, helpButton_texture, quitButton_texture;
 
-	menuBackground_texture.loadFromFile("sprites/Menu_Background.png");
-	normalButton_texture.loadFromFile("sprites/Normal.png");
-	timedButton_texture.loadFromFile("sprites/Timed.png");
-	helpButton_texture.loadFromFile("sprites/Help.png");
-	quitButton_texture.loadFromFile("sprites/Quit.png");
+	menuBackground_texture.loadFromFile("assets/textures/Menu_Background.png");
+	normalButton_texture.loadFromFile("assets/textures/Normal.png");
+	timedButton_texture.loadFromFile("assets/textures/Timed.png");
+	helpButton_texture.loadFromFile("assets/textures/Help.png");
+	quitButton_texture.loadFromFile("assets/textures/Quit.png");
 
 	// Creating sprites
 	Sprite menu_background(menuBackground_texture), normalButton_sprite(normalButton_texture), timedButton_sprite(timedButton_texture), helpButton_sprite(helpButton_texture), quitButton_sprite(quitButton_texture);
@@ -54,12 +54,13 @@ int main()
 				if (helpButton_sprite.getGlobalBounds().contains(mousePos.x, mousePos.y))
 				{
 					mainMenu.close();
+					mainMenuMusic.stop();
 
 					RenderWindow window(VideoMode(740, 480), "Help ");
 
 					// Rendering game content (text, background)
 					Font gameFont;
-					gameFont.loadFromFile("sprites/Font/Digitalt.ttf");
+					gameFont.loadFromFile("assets/font/Digitalt.ttf");
 
 					Texture background;
 					background.loadFromFile("assets/textures/background.png");
@@ -67,7 +68,7 @@ int main()
 					Sprite backgroundSprite(background);
 
 					Texture backButton_texture;
-					backButton_texture.loadFromFile("sprites/Back.png");
+					backButton_texture.loadFromFile("assets/textures/Back.png");
 					Sprite backButton_sprite(backButton_texture);
 					backButton_sprite.setPosition(335, 380);
 
@@ -164,7 +165,7 @@ int main()
 					level_sprite.setPosition(584, 12);
 
 					Font gameFont;
-					gameFont.loadFromFile("sprites/Font/Digitalt.ttf");
+					gameFont.loadFromFile("assets/font/Digitalt.ttf");
 
 					Text scoreText("Score: " + to_string(score), gameFont, 24);
 					scoreText.setFillColor(Color::White);
@@ -196,7 +197,7 @@ int main()
 							if (gameEvent.type == Event::Closed) // Closes the window if the user clicks the close button
 								game_normal.close();
 
-							if ((gameEvent.type == Event::MouseButtonPressed) && (gameEvent.key.code == Mouse::Left)) // Checks if the user clicks the left mouse button
+							if ((gameEvent.type == Event::MouseButtonPressed)) // Checks if the user clicks the left mouse button
 							{
 								position = Mouse::getPosition(game_normal);
 								clickNumber++;
@@ -260,10 +261,11 @@ int main()
 						matchSpecies(gridSpecies, matchedCount, score);
 
 						// Checking if there are any possible moves left
-						if ((anyPossibleMoves(gridSpecies, score) == false) || true)
+						if ((anyPossibleMoves(gridSpecies, score) == false))
 						{
 							// Showing game over screen
 							game_normal.close();
+							normalGameMusic.stop();
 
 							// creating new window
 							RenderWindow gameOverWindow(VideoMode(740, 480), "Game Over");
@@ -271,11 +273,11 @@ int main()
 
 							// creating sprite for back button
 							Texture backButton_texture;
-							backButton_texture.loadFromFile("sprites/Back.png");
+							backButton_texture.loadFromFile("assets/textures/Back.png");
 							Sprite backButton_sprite(backButton_texture);
 							backButton_sprite.setPosition(335, 300);
 
-															// drawing the "game over" text
+							// drawing the "game over" text
 							Text gameOverText("Game Over", gameFont, 48);
 							gameOverText.setFillColor(Color::Blue);
 							gameOverText.setPosition(272, 160);
@@ -303,12 +305,13 @@ int main()
 									if (gameEvent.type == Event::Closed)
 										gameOverWindow.close();
 
-									if (gameEvent.type == Event::MouseButtonReleased && gameEvent.mouseButton.button == Mouse::Left)
+									if (gameEvent.type == Event::MouseButtonReleased)
 									{
 										Vector2i mousePos = Mouse::getPosition(gameOverWindow);
 										if (backButton_sprite.getGlobalBounds().contains(mousePos.x, mousePos.y))
 										{
 											gameOverWindow.close();
+											gameOverMusic.stop();
 											main();
 										}
 									}
@@ -349,26 +352,23 @@ int main()
 
 						// Creating sprites using loaded textures
 						Sprite *speciesSprites = new Sprite[7];
-						for (int i = 0; i < 7; i++)
-							speciesSprites[i] = Sprite(barSpecies_textures[i]);
-
 						Sprite *progressBarBaseSprites = new Sprite[7];
-						for (int i = 0; i < 7; i++)
-							progressBarBaseSprites[i] = Sprite(barBase_textures[i]);
-
 						Sprite *progressBarOverlaySprites = new Sprite[7];
+
 						for (int i = 0; i < 7; i++)
+						{
+							speciesSprites[i] = Sprite(barSpecies_textures[i]);
+							progressBarBaseSprites[i] = Sprite(barBase_textures[i]);
 							progressBarOverlaySprites[i] = Sprite(barOverlay_textures[i]);
+						}
 
 						// Setting progress bar base and bar size
 						for (int i = 0; i < 7; i++)
+						{
 							speciesSprites[i].setTextureRect(IntRect(49 * i, 0, 50, 50));
-
-						for (int i = 0; i < 7; i++)
 							progressBarBaseSprites[i].setTextureRect(IntRect(0, 0, 123, 24));
-
-						for (int i = 0; i < 7; i++)
 							progressBarOverlaySprites[i].setTextureRect(IntRect(0, 0, calcBarWidth(matchedCount[i], ((i * (-1000)) + 8000)), 20));
+						}
 
 						// Close the window and Game if the player has collected all the species
 						int speciesRepo[7] = {8000, 7000, 6000, 5000, 4000, 3000, 2000};
@@ -379,10 +379,11 @@ int main()
 							if (matchedCount[i] >= speciesRepo[i])
 							{
 								game_normal.close();
+								normalGameMusic.stop();
 
 								// geting the winning animal and showing it on the screen
 								Texture winningAnimal_texture;
-								winningAnimal_texture.loadFromFile("sprites/animals.png");
+								winningAnimal_texture.loadFromFile("assets/textures/animals.png");
 								Sprite winningAnimal_sprite(winningAnimal_texture);
 								winningAnimal_sprite.setTextureRect(IntRect(49 * i, 0, 50, 50));
 								winningAnimal_sprite.setPosition(342, 150);
@@ -399,13 +400,21 @@ int main()
 
 								// creating the back button
 								Texture backButton_texture;
-								backButton_texture.loadFromFile("sprites/Back.png");
+								backButton_texture.loadFromFile("assets/textures/Back.png");
 								Sprite backButton_sprite(backButton_texture);
 								backButton_sprite.setPosition(335, 300);
 
 								// creating new window
 								RenderWindow winWindow(VideoMode(740, 480), "Final Score");
 								winWindow.setFramerateLimit(60);
+
+								Music youWinMusic;
+								
+								if (!youWinMusic.openFromFile("assets/music/tower-clear-new-super-mario-bros-wii-chiptune.ogg"))
+									return -1;
+								
+								youWinMusic.play();
+								youWinMusic.setVolume(100);
 
 								// Game loop
 								while (winWindow.isOpen())
@@ -421,6 +430,7 @@ int main()
 											if (backButton_sprite.getGlobalBounds().contains(mousePos.x, mousePos.y))
 											{
 												winWindow.close();
+												youWinMusic.stop();
 												main();
 											}
 										}
@@ -449,12 +459,11 @@ int main()
 
 						// Drawing progress bars
 						for (int i = 0; i < 7; i++)
+						{
 							game_normal.draw(speciesSprites[i]);
-						for (int i = 0; i < 7; i++)
 							game_normal.draw(progressBarBaseSprites[i]);
-						for (int i = 0; i < 7; i++)
 							game_normal.draw(progressBarOverlaySprites[i]);
-
+						}
 						// Display cursor and window
 						game_normal.draw(cursor_sprite);
 
@@ -505,7 +514,7 @@ int main()
 					timerBackground_sprite.setPosition(584, 12);
 
 					Font gameFont;
-					gameFont.loadFromFile("sprites/Font/Digitalt.ttf");
+					gameFont.loadFromFile("assets/font/Digitalt.ttf");
 
 					Text scoreText("Score: " + to_string(score), gameFont, 24);
 					scoreText.setFillColor(Color::White);
@@ -539,7 +548,7 @@ int main()
 							if (gameEvent.type == Event::Closed) // Closes the window if the user clicks the close button
 								game_timed.close();
 
-							if ((gameEvent.type == Event::MouseButtonPressed) && (gameEvent.key.code == Mouse::Left)) // Checks if the user clicks the left mouse button
+							if ((gameEvent.type == Event::MouseButtonPressed)) // Checks if the user clicks the left mouse button
 							{
 								position = Mouse::getPosition(game_timed);
 								clickNumber++;
@@ -605,6 +614,11 @@ int main()
 						int minutes = seconds / 60;
 						seconds = seconds % 60;
 
+						bool timeLow = false;
+
+						if (seconds == 30 && minutes == 0)
+							timeLow = true;
+
 						string secondsString = to_string(seconds);
 						if (seconds < 10)
 							secondsString = "0" + secondsString;
@@ -619,11 +633,20 @@ int main()
 						scoreText.setString("Score: " + to_string(score));
 						game_timed.draw(scoreText);
 
+						if (timeLow)
+						{
+							timerText.setFillColor(Color::Red);
+							timedGameMusic.setPitch(1.5f);
+						
+							timeLow = false;
+						}
+
 						// Checking if there are any possible moves left
 						if ((anyPossibleMoves(gridSpecies, score) == false) || (seconds == 0 && minutes == 0))
 						{
 							// Showing game over screen
 							game_timed.close();
+							timedGameMusic.stop();
 
 							// creating new window
 							RenderWindow gameOverWindow(VideoMode(740, 480), "Game Over");
@@ -631,7 +654,7 @@ int main()
 
 							// creating sprite for back button
 							Texture backButton_texture;
-							backButton_texture.loadFromFile("sprites/Back.png");
+							backButton_texture.loadFromFile("assets/textures/Back.png");
 							Sprite backButton_sprite(backButton_texture);
 							backButton_sprite.setPosition(335, 300);
 
@@ -669,6 +692,7 @@ int main()
 										if (backButton_sprite.getGlobalBounds().contains(mousePos.x, mousePos.y))
 										{
 											gameOverWindow.close();
+											gameOverMusic.stop();
 											main();
 										}
 									}
@@ -701,27 +725,24 @@ int main()
 
 						// Creating sprites using loaded textures
 						Sprite *speciesSprites = new Sprite[7];
-						for (int i = 0; i < 7; i++)
-							speciesSprites[i] = Sprite(barSpecies_textures[i]);
-
 						Sprite *progressBarBaseSprites = new Sprite[7];
-						for (int i = 0; i < 7; i++)
-							progressBarBaseSprites[i] = Sprite(barBase_textures[i]);
-
 						Sprite *progressBarOverlaySprites = new Sprite[7];
+
 						for (int i = 0; i < 7; i++)
+						{
+							speciesSprites[i] = Sprite(barSpecies_textures[i]);
+							progressBarBaseSprites[i] = Sprite(barBase_textures[i]);
 							progressBarOverlaySprites[i] = Sprite(barOverlay_textures[i]);
+						}
 
 						// Setting progress bar base and bar size
 						for (int i = 0; i < 7; i++)
+						{
 							speciesSprites[i].setTextureRect(IntRect(49 * i, 0, 50, 50));
-
-						for (int i = 0; i < 7; i++)
 							progressBarBaseSprites[i].setTextureRect(IntRect(0, 0, 123, 24));
-
-						for (int i = 0; i < 7; i++)
 							progressBarOverlaySprites[i].setTextureRect(IntRect(0, 0, calcBarWidth(matchedCount[i], ((i * (-1000)) + 8000)), 20));
-
+						}
+						
 						// Close the window and Game if the player has collected all the species
 						int speciesRepo[7] = {8000, 7000, 6000, 5000, 4000, 3000, 2000};
 
@@ -734,7 +755,7 @@ int main()
 
 								// geting the winning animal and showing it on the screen
 								Texture winningAnimal_texture;
-								winningAnimal_texture.loadFromFile("sprites/animals.png");
+								winningAnimal_texture.loadFromFile("assets/textures/animals.png");
 								Sprite winningAnimal_sprite(winningAnimal_texture);
 								winningAnimal_sprite.setTextureRect(IntRect(49 * i, 0, 50, 50));
 								winningAnimal_sprite.setPosition(342, 150);
@@ -751,7 +772,7 @@ int main()
 
 								// creating the back button
 								Texture backButton_texture;
-								backButton_texture.loadFromFile("sprites/Back.png");
+								backButton_texture.loadFromFile("assets/textures/Back.png");
 								Sprite backButton_sprite(backButton_texture);
 								backButton_sprite.setPosition(335, 300);
 
@@ -801,11 +822,11 @@ int main()
 
 						// Drawing progress bars
 						for (int i = 0; i < 7; i++)
+						{
 							game_timed.draw(speciesSprites[i]);
-						for (int i = 0; i < 7; i++)
 							game_timed.draw(progressBarBaseSprites[i]);
-						for (int i = 0; i < 7; i++)
 							game_timed.draw(progressBarOverlaySprites[i]);
+						}
 
 						// Display cursor and window
 						game_timed.draw(cursor_sprite);
