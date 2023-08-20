@@ -199,7 +199,7 @@ int main()
 					levelText.setPosition(608, 12);
 
 					// Variables for detecting mouse click and calculating col and row of click tile
-					int column1, column2, row1, row2, clickNumber = 0, soundPlayed = 0, scoreLimit = 200;
+					int column1, column2, row1, row2, clickNumber = 0, soundPlayed = 0, scoreLimit = 150;
 					Vector2i position;
 
 					Music normalGameMusic;
@@ -225,10 +225,42 @@ int main()
 								clickNumber++;
 							}
 						}
+						
+						// Generating new level
 						if (score >= scoreLimit)
-						{
+						{	
+							normalGameMusic.stop();
+
+							SoundBuffer levelUp_buffer;
+							levelUp_buffer.loadFromFile("assets/audio/levelUp.ogg");
+							Sound levelUpSound(levelUp_buffer);
+							levelUpSound.play();
+
 							level++;
-							scoreLimit += 1000 + (100 * level);
+
+							// flashing the level text
+							for (int i = 0; i < 5; i++)
+							{
+								game_normal.draw(background_sprite);
+								game_normal.draw(level_sprite);
+
+								levelText.setFillColor(Color::Yellow);
+								game_normal.draw(levelText);
+
+								game_normal.display();
+								sleep(milliseconds(100));
+
+								levelText.setFillColor(Color::White);
+								game_normal.draw(levelText);
+								game_normal.display();
+								sleep(milliseconds(100));
+
+							}
+
+							normalGameMusic.setPitch(1.5f);
+							normalGameMusic.play();
+
+							scoreLimit += 100 + (100 * level);
 							populateGrid(tileSize, gridXPos, gridYPos, gridRow, gridCol, gridSpecies);
 						}
 
