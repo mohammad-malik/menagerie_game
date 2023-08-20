@@ -3,7 +3,7 @@
 int main()
 {
 	// Rendering the window
-	RenderWindow mainMenu(VideoMode(740, 480), "Main Menu");
+	RenderWindow mainMenu(VideoMode(740, 490), "Main Menu");
 
 	// Declaring textures
 	Texture menuBackground_texture, normalButton_texture, timedButton_texture, helpButton_texture, quitButton_texture;
@@ -23,14 +23,28 @@ int main()
 	quitButton_sprite.setPosition(336, 350);
 
 	// Load music file
-	Music mainMenuMusic;
+    Music mainMenuMusic;
 
-	if (!mainMenuMusic.openFromFile("assets/music/8-bit-arcade-moodmode.ogg"))
+<<<<<<< Updated upstream
+    if (!mainMenuMusic.openFromFile("assets/music/8-bit-arcade-moodmode.mp3"))
+        return -1;
+=======
+	if (!mainMenuMusic.openFromFile("assets/audio/8-bit-arcade-moodmode.ogg"))
 		return -1;
+>>>>>>> Stashed changes
 
 	mainMenuMusic.setLoop(true);
 	mainMenuMusic.setVolume(50);
-	mainMenuMusic.play();
+    mainMenuMusic.play();
+
+	SoundBuffer click1_buffer, click2_buffer, click_incorrect_buffer, click_match_buffer, click_nav_buffer;
+	click1_buffer.loadFromFile("assets/audio/click1.ogg");
+	click2_buffer.loadFromFile("assets/audio/click2.ogg");
+	click_incorrect_buffer.loadFromFile("assets/audio/invalidMatch.ogg");
+	click_match_buffer.loadFromFile("assets/audio/click2.ogg");
+	click_nav_buffer.loadFromFile("assets/audio/navClick.ogg");
+
+	Sound clickSound(click_nav_buffer);
 
 	// Initiates event checker
 	Event gameEvent;
@@ -39,43 +53,52 @@ int main()
 	{
 		while (mainMenu.pollEvent(gameEvent)) // Checks for events and start loop
 		{
-			 // for close button
+			// closes window if close button is pressed
 			if (gameEvent.type == Event::Closed)
 			{
 				mainMenu.close();
 				return 0;
 			}
 
-			if ((gameEvent.type == Event::MouseButtonReleased) && (gameEvent.mouseButton.button == Mouse::Left))
+			// checking if mouse is clicked anywhere else
+			if (gameEvent.type == Event::MouseButtonReleased && gameEvent.mouseButton.button == Mouse::Left)
 			{
 				Vector2i mousePos = Mouse::getPosition(mainMenu);
 				if (quitButton_sprite.getGlobalBounds().contains(mousePos.x, mousePos.y))
-				{
+				{					
 					mainMenu.close();
 					return 0;
 				}
 
 				if (helpButton_sprite.getGlobalBounds().contains(mousePos.x, mousePos.y))
 				{
+					clickSound.setBuffer(click_nav_buffer);
+					clickSound.play();
+
 					mainMenu.close();
 					mainMenuMusic.stop();
 
-					RenderWindow window(VideoMode(740, 480), "Help ");
+					RenderWindow window(VideoMode(740, 490), "Help ");
 
 					// Rendering game content (text, background)
 					Font gameFont;
 					gameFont.loadFromFile("assets/font/Digitalt.ttf");
 
 					Texture background;
-					background.loadFromFile("assets/textures/background.png");
+					background.loadFromFile("assets/background.png");
 
 					Sprite backgroundSprite(background);
 
 					Texture backButton_texture;
 					backButton_texture.loadFromFile("assets/textures/Back.png");
 					Sprite backButton_sprite(backButton_texture);
+<<<<<<< Updated upstream
 					backButton_sprite.setPosition(335, 380);
+					
+=======
+					backButton_sprite.setPosition(335, 410);
 
+>>>>>>> Stashed changes
 					Text titleText("Hello and welcome to Menageire!", gameFont, 36);
 					titleText.setFillColor(Color::Yellow);
 					titleText.setPosition(105, 10);
@@ -83,7 +106,7 @@ int main()
 					Text helpText("In this section, we will take you through the rules and basic \nintrouction of the game. So, here are the rules:\n", gameFont, 24);
 					helpText.setFillColor(Color::White);
 					helpText.setPosition(10, 80);
-
+					
 					Text instructions("1. This is a single player game.\n2. You NEED to match at least 3 tiles together to get points.\n3. If you match 3 tiles, you will get 10 points, if you match 4 tiles,\nyou will get 20 points, and so on.\n4. Invalid moves will be reverted.", gameFont, 24);
 					instructions.setFillColor(Color::Yellow);
 					instructions.setPosition(10, 150);
@@ -94,7 +117,11 @@ int main()
 
 					Music helpMusic;
 
-					if (!helpMusic.openFromFile("assets/music/8-bit-dream-land-moodmode.ogg"))
+<<<<<<< Updated upstream
+					if (!helpMusic.openFromFile("assets/music/8-bit-dream-land-moodmode.mp3"))
+=======
+					if (!helpMusic.openFromFile("assets/audio/8-bit-dream-land-moodmode.ogg"))
+>>>>>>> Stashed changes
 						return -1;
 
 					helpMusic.setLoop(true);
@@ -117,8 +144,10 @@ int main()
 								Vector2i mousePos = Mouse::getPosition(window);
 								if (backButton_sprite.getGlobalBounds().contains(mousePos.x, mousePos.y))
 								{
+									clickSound.setBuffer(click_nav_buffer);
+									clickSound.play();
+									
 									window.close();
-									helpMusic.stop();
 									main();
 								}
 							}
@@ -136,8 +165,10 @@ int main()
 
 				if (normalButton_sprite.getGlobalBounds().contains(mousePos.x, mousePos.y))
 				{
+					clickSound.setBuffer(click_nav_buffer);
+					clickSound.play();
+
 					mainMenu.close();
-					mainMenuMusic.stop();
 
 					// Declaring required variables
 					int score = 0;
@@ -155,12 +186,12 @@ int main()
 					populateGrid(tileSize, gridXPos, gridYPos, gridRow, gridCol, gridSpecies);
 
 					// Setting app window dimensions, title and framerate
-					RenderWindow game_normal(VideoMode(740, 480), "Menagerie Adventures");
+					RenderWindow game_normal(VideoMode(740, 490), "Menagerie Adventures");
 					game_normal.setFramerateLimit(60);
 
 					Texture bg_texture, animal_textures, cursor_texture, level_texture;
 					bg_texture.loadFromFile("assets/textures/background.png");
-					animal_textures.loadFromFile("assets/textures/animals.png");
+					animal_textures.loadFromFile("assets/animals.png");
 					cursor_texture.loadFromFile("assets/textures/cursor.png");
 					level_texture.loadFromFile("assets/textures/Level_Base.png");
 
@@ -180,14 +211,22 @@ int main()
 					levelText.setPosition(608, 12);
 
 					// Variables for detecting mouse click and calculating col and row of click tile
-					int column1, column2, row1, row2, clickNumber = 0, scoreLimit = 200;
+<<<<<<< Updated upstream
+					int column1, column2, row1, row2, clickNumber = 0, scoreLimit = 1000;
+=======
+					int column1, column2, row1, row2, clickNumber = 0, soundPlayed = 0, scoreLimit = 200;
+>>>>>>> Stashed changes
 					Vector2i position;
 
 					Music normalGameMusic;
 
-					if (!normalGameMusic.openFromFile("assets/music/8-bit-game-moodmode.ogg"))
+<<<<<<< Updated upstream
+					if (!normalGameMusic.openFromFile("assets/music/8-bit-arcade-moodmode.mp3"))
+=======
+					if (!normalGameMusic.openFromFile("assets/audio/8-bit-game-moodmode.ogg"))
+>>>>>>> Stashed changes
 						return -1;
-
+					
 					normalGameMusic.setLoop(true);
 					normalGameMusic.setVolume(50);
 					normalGameMusic.play();
@@ -201,7 +240,7 @@ int main()
 							if (gameEvent.type == Event::Closed) // Closes the window if the user clicks the close button
 								game_normal.close();
 
-							if ((gameEvent.type == Event::MouseButtonPressed)) // Checks if the user clicks the left mouse button
+							if ((gameEvent.type == Event::MouseButtonPressed) && (gameEvent.key.code == Mouse::Left)) // Checks if the user clicks the left mouse button
 							{
 								position = Mouse::getPosition(game_normal);
 								clickNumber++;
@@ -218,15 +257,28 @@ int main()
 						{
 						// Deducing row and col using coords for first click
 						case 1:
+
 							column1 = position.x / tileSize;
 							row1 = position.y / tileSize;
-
+							
+							if (soundPlayed == 0)
+							{
+								clickSound.setBuffer(click1_buffer);
+								clickSound.play();
+								soundPlayed++;
+							}
 							break;
 
 						// Deducing row and col using coords for second click
 						case 2:
+
 							column2 = position.x / tileSize;
 							row2 = position.y / tileSize;
+
+							// Addresses random clicks
+							clickSound.setBuffer(click_incorrect_buffer);
+							clickSound.play();
+							soundPlayed++;
 
 							// check if the tiles are adjacent
 							if (absVal(column1 - column2) + absVal(row1 - row2) == 1)
@@ -235,9 +287,20 @@ int main()
 
 								// if the swap doesn't result in a match, swap the tiles back
 								if (!(matchSpecies(gridSpecies, 0, score, false)))
+								{
+									clickSound.setBuffer(click_incorrect_buffer);
+									clickSound.play();
+
 									swapTiles(gridSpecies, row1, row2, column1, column2);
+								}
+								else
+								{
+									clickSound.setBuffer(click_match_buffer);
+									clickSound.play();
+								}
 							}
 
+							soundPlayed = 0;
 							clickNumber = 0;
 							break;
 						}
@@ -256,7 +319,7 @@ int main()
 								animal_sprite.setTextureRect(IntRect(x, y, width, height));
 
 								// Setting tiles at their position defined in the struct grid
-								animal_sprite.setPosition(gridXPos[row][col], gridYPos[row][col]);
+								animal_sprite.setPosition((gridXPos[row][col] + 5), (gridYPos[row][col] + 5));
 								game_normal.draw(animal_sprite);
 							}
 						}
@@ -265,14 +328,14 @@ int main()
 						matchSpecies(gridSpecies, matchedCount, score);
 
 						// Checking if there are any possible moves left
-						if ((anyPossibleMoves(gridSpecies, score) == false))
+						if (anyPossibleMoves(gridSpecies, score) == false)
 						{
 							// Showing game over screen
 							game_normal.close();
 							normalGameMusic.stop();
 
 							// creating new window
-							RenderWindow gameOverWindow(VideoMode(740, 480), "Game Over");
+							RenderWindow gameOverWindow(VideoMode(740, 490), "Game Over");
 							gameOverWindow.setFramerateLimit(60);
 
 							// creating sprite for back button
@@ -293,12 +356,18 @@ int main()
 
 							// gameover audio
 							Music gameOverMusic;
+<<<<<<< Updated upstream
+							
+							if (!gameOverMusic.openFromFile("assets/music/8-bit-arcade-moodmode.mp3"))
+=======
 
-							if (!(gameOverMusic.openFromFile("assets/music/faint-courage-toby-fox.ogg")))
+							if (!(gameOverMusic.openFromFile("assets/audio/faint-courage-toby-fox.ogg")))
+>>>>>>> Stashed changes
 								return -1;
 
 							gameOverMusic.play();
 							gameOverMusic.setVolume(50);
+							gameOverMusic.setLoop(true);
 
 							// Game loop
 							while (gameOverWindow.isOpen())
@@ -309,11 +378,14 @@ int main()
 									if (gameEvent.type == Event::Closed)
 										gameOverWindow.close();
 
-									if (gameEvent.type == Event::MouseButtonReleased)
+									if (gameEvent.type == Event::MouseButtonReleased && gameEvent.mouseButton.button == Mouse::Left)
 									{
 										Vector2i mousePos = Mouse::getPosition(gameOverWindow);
 										if (backButton_sprite.getGlobalBounds().contains(mousePos.x, mousePos.y))
 										{
+											clickSound.setBuffer(click_nav_buffer);
+											clickSound.play();
+
 											gameOverWindow.close();
 											gameOverMusic.stop();
 											main();
@@ -334,7 +406,7 @@ int main()
 						game_normal.draw(level_sprite);
 						levelText.setString("Level " + to_string(level));
 						game_normal.draw(levelText);
-
+						
 						scoreText.setString("Score: " + to_string(score));
 						game_normal.draw(scoreText);
 
@@ -349,30 +421,33 @@ int main()
 						// Loading progress bars
 						for (int i = 0; i < 7; i++)
 						{
-							barBase_textures[i].loadFromFile("assets/textures/progress_base.png");
-							barOverlay_textures[i].loadFromFile("assets/textures/pb_fill.png");
-							barSpecies_textures[i].loadFromFile("assets/textures/animals.png");
+							barBase_textures[i].loadFromFile("assets/progress_base.png");
+							barOverlay_textures[i].loadFromFile("assets/pb_fill.png");
+							barSpecies_textures[i].loadFromFile("assets/animals.png");
 						}
 
 						// Creating sprites using loaded textures
 						Sprite *speciesSprites = new Sprite[7];
-						Sprite *progressBarBaseSprites = new Sprite[7];
-						Sprite *progressBarOverlaySprites = new Sprite[7];
-
 						for (int i = 0; i < 7; i++)
-						{
 							speciesSprites[i] = Sprite(barSpecies_textures[i]);
+
+						Sprite *progressBarBaseSprites = new Sprite[7];
+						for (int i = 0; i < 7; i++)
 							progressBarBaseSprites[i] = Sprite(barBase_textures[i]);
+
+						Sprite *progressBarOverlaySprites = new Sprite[7];
+						for (int i = 0; i < 7; i++)
 							progressBarOverlaySprites[i] = Sprite(barOverlay_textures[i]);
-						}
 
 						// Setting progress bar base and bar size
 						for (int i = 0; i < 7; i++)
-						{
 							speciesSprites[i].setTextureRect(IntRect(49 * i, 0, 50, 50));
+
+						for (int i = 0; i < 7; i++)
 							progressBarBaseSprites[i].setTextureRect(IntRect(0, 0, 123, 24));
+
+						for (int i = 0; i < 7; i++)
 							progressBarOverlaySprites[i].setTextureRect(IntRect(0, 0, calcBarWidth(matchedCount[i], ((i * (-1000)) + 8000)), 20));
-						}
 
 						// Close the window and Game if the player has collected all the species
 						int speciesRepo[7] = {8000, 7000, 6000, 5000, 4000, 3000, 2000};
@@ -383,7 +458,6 @@ int main()
 							if (matchedCount[i] >= speciesRepo[i])
 							{
 								game_normal.close();
-								normalGameMusic.stop();
 
 								// geting the winning animal and showing it on the screen
 								Texture winningAnimal_texture;
@@ -391,7 +465,7 @@ int main()
 								Sprite winningAnimal_sprite(winningAnimal_texture);
 								winningAnimal_sprite.setTextureRect(IntRect(49 * i, 0, 50, 50));
 								winningAnimal_sprite.setPosition(342, 150);
-
+							
 								// drawing the final score
 								Text finalScoreText("Final Score: " + to_string(score), gameFont, 24);
 								finalScoreText.setFillColor(Color::White);
@@ -409,37 +483,49 @@ int main()
 								backButton_sprite.setPosition(335, 300);
 
 								// creating new window
-								RenderWindow winWindow(VideoMode(740, 480), "Final Score");
+								RenderWindow winWindow(VideoMode(740, 490), "Final Score");
 								winWindow.setFramerateLimit(60);
+<<<<<<< Updated upstream
+=======
 
 								Music youWinMusic;
 								
-								if (!youWinMusic.openFromFile("assets/music/tower-clear-new-super-mario-bros-wii-chiptune.ogg"))
+								if (!youWinMusic.openFromFile("assets/audio/tower-clear-new-super-mario-bros-wii-chiptune.ogg"))
 									return -1;
+>>>>>>> Stashed changes
 								
-								youWinMusic.play();
-								youWinMusic.setVolume(100);
-
 								// Game loop
 								while (winWindow.isOpen())
 								{
 									while (winWindow.pollEvent(gameEvent))
-									{
-										if (gameEvent.type == Event::Closed)
-											winWindow.close();
+								{
+									if (gameEvent.type == Event::Closed)
+										winWindow.close();
 
-										if (gameEvent.type == Event::MouseButtonReleased && gameEvent.mouseButton.button == Mouse::Left)
+									if (gameEvent.type == Event::MouseButtonReleased && gameEvent.mouseButton.button == Mouse::Left)
+									{
+										Vector2i mousePos = Mouse::getPosition(winWindow);
+										if (backButton_sprite.getGlobalBounds().contains(mousePos.x, mousePos.y))
 										{
+<<<<<<< Updated upstream
+											winWindow.close();
+											main();
+=======
 											Vector2i mousePos = Mouse::getPosition(winWindow);
 											if (backButton_sprite.getGlobalBounds().contains(mousePos.x, mousePos.y))
 											{
+												clickSound.setBuffer(click_nav_buffer);
+												clickSound.play();
+
 												winWindow.close();
 												youWinMusic.stop();
 												main();
 											}
+>>>>>>> Stashed changes
 										}
 									}
-
+								}
+									
 									// Drawing text
 									winWindow.draw(background_sprite);
 									winWindow.draw(finalScoreText);
@@ -448,31 +534,38 @@ int main()
 									winWindow.draw(winningAnimal_sprite);
 									winWindow.display();
 								}
+
+								main();
 							}
 						}
 
 						// Setting progress bars positions
 						for (int i = 0; i < 7; i++)
 						{
-							speciesSprites[i].setPosition(460, 50 + (60 * i));
-							progressBarBaseSprites[i].setPosition(535, (62 + (61 * (i - 0))));
-							progressBarOverlaySprites[i].setPosition(537, (64 + (61 * (i - 0))));
+							speciesSprites[i].setPosition(460, (55 + (60 * i)));
+							progressBarBaseSprites[i].setPosition(535, (67 + (61 * (i - 0))));
+							progressBarOverlaySprites[i].setPosition(537, (69 + (61 * (i - 0))));
 						}
 
 						// Drawing progress bars
 						for (int i = 0; i < 7; i++)
-						{
 							game_normal.draw(speciesSprites[i]);
+						for (int i = 0; i < 7; i++)
 							game_normal.draw(progressBarBaseSprites[i]);
+						for (int i = 0; i < 7; i++)
 							game_normal.draw(progressBarOverlaySprites[i]);
-						}
+<<<<<<< Updated upstream
+
 						// Display cursor and window
 						game_normal.draw(cursor_sprite);
+=======
+						}
+>>>>>>> Stashed changes
 
-						// Drawing game window
+						game_normal.draw(cursor_sprite);
 						game_normal.display();
 
-						// deleting the dynamic arrays
+						// deleting dynamic arrays
 						delete[] speciesSprites;
 						delete[] progressBarBaseSprites;
 						delete[] progressBarOverlaySprites;
@@ -484,8 +577,10 @@ int main()
 
 				if (timedButton_sprite.getGlobalBounds().contains(mousePos.x, mousePos.y))
 				{
+					clickSound.setBuffer(click_nav_buffer);
+					clickSound.play();
+
 					mainMenu.close();
-					mainMenuMusic.stop();
 
 					// Declaring required variables
 					int score = 0;
@@ -502,12 +597,12 @@ int main()
 					populateGrid(tileSize, gridXPos, gridYPos, gridRow, gridCol, gridSpecies);
 
 					// Setting app window dimensions, title and framerate
-					RenderWindow game_timed(VideoMode(740, 480), "Menagerie Adventures");
+					RenderWindow game_timed(VideoMode(740, 490), "Menagerie Adventures");
 					game_timed.setFramerateLimit(60);
 
 					Texture bg_texture, animal_textures, cursor_texture, level_texture;
 					bg_texture.loadFromFile("assets/textures/background.png");
-					animal_textures.loadFromFile("assets/textures/animals.png");
+					animal_textures.loadFromFile("assets/animals.png");
 					cursor_texture.loadFromFile("assets/textures/cursor.png");
 					level_texture.loadFromFile("assets/textures/Level_Base.png");
 
@@ -530,14 +625,19 @@ int main()
 					Time elapsedTime;
 
 					// Variables for detecting mouse click and calculating col and row of click tile
-					int column1, column2, row1, row2, clickNumber = 0;
+					int column1, column2, row1, row2, clickNumber = 0, soundPlayed = 0;
 					Vector2i position;
 
 					Music timedGameMusic;
+<<<<<<< Updated upstream
+					
+					if (!(timedGameMusic.openFromFile("assets/sounds/party-event-moodmode.mp3")))
+=======
 
-					if (!(timedGameMusic.openFromFile("assets/music/party-event-moodmode.ogg")))
+					if (!(timedGameMusic.openFromFile("assets/audio/party-event-moodmode.ogg")))
+>>>>>>> Stashed changes
 						return -1;
-
+						
 					timedGameMusic.setVolume(50);
 					timedGameMusic.play();
 
@@ -550,7 +650,7 @@ int main()
 							if (gameEvent.type == Event::Closed) // Closes the window if the user clicks the close button
 								game_timed.close();
 
-							if ((gameEvent.type == Event::MouseButtonPressed)) // Checks if the user clicks the left mouse button
+							if ((gameEvent.type == Event::MouseButtonPressed) && (gameEvent.key.code == Mouse::Left)) // Checks if the user clicks the left mouse button
 							{
 								position = Mouse::getPosition(game_timed);
 								clickNumber++;
@@ -564,6 +664,13 @@ int main()
 						case 1:
 							column1 = position.x / tileSize;
 							row1 = position.y / tileSize;
+							
+							if (soundPlayed == 0)
+							{
+								clickSound.setBuffer(click1_buffer);
+								clickSound.play();
+								soundPlayed++;
+							}
 
 							break;
 
@@ -572,6 +679,11 @@ int main()
 							column2 = position.x / tileSize;
 							row2 = position.y / tileSize;
 
+							// Addresses random clicks
+							clickSound.setBuffer(click_incorrect_buffer);
+							clickSound.play();
+							soundPlayed++;
+
 							// check if the tiles are adjacent
 							if (absVal(column1 - column2) + absVal(row1 - row2) == 1)
 							{
@@ -579,9 +691,20 @@ int main()
 
 								// if the swap doesn't result in a match, swap the tiles back
 								if (!(matchSpecies(gridSpecies, 0, score, false)))
+								{
+									clickSound.setBuffer(click_incorrect_buffer);
+									clickSound.play();
+
 									swapTiles(gridSpecies, row1, row2, column1, column2);
+								}
+								else
+								{
+									clickSound.setBuffer(click_match_buffer);
+									clickSound.play();
+								}
 							}
 
+							soundPlayed = 0;
 							clickNumber = 0;
 							break;
 						}
@@ -600,14 +723,14 @@ int main()
 								animal_sprite.setTextureRect(IntRect(x, y, width, height));
 
 								// Setting tiles at their position defined in the struct grid
-								animal_sprite.setPosition(gridXPos[row][col], gridYPos[row][col]);
+								animal_sprite.setPosition((gridXPos[row][col] + 5), (gridYPos[row][col] + 5));
 								game_timed.draw(animal_sprite);
 							}
 						}
 
 						// Checking for matching species
 						matchSpecies(gridSpecies, matchedCount, score);
-
+						
 						// Drawing text
 						game_timed.draw(timerBackground_sprite);
 
@@ -615,11 +738,6 @@ int main()
 						int seconds = 120 - elapsedTime.asSeconds();
 						int minutes = seconds / 60;
 						seconds = seconds % 60;
-
-						bool timeLow = false;
-
-						if (seconds == 30 && minutes == 0)
-							timeLow = true;
 
 						string secondsString = to_string(seconds);
 						if (seconds < 10)
@@ -635,14 +753,6 @@ int main()
 						scoreText.setString("Score: " + to_string(score));
 						game_timed.draw(scoreText);
 
-						if (timeLow)
-						{
-							timerText.setFillColor(Color::Red);
-							timedGameMusic.setPitch(1.5f);
-						
-							timeLow = false;
-						}
-
 						// Checking if there are any possible moves left
 						if ((anyPossibleMoves(gridSpecies, score) == false) || (seconds == 0 && minutes == 0))
 						{
@@ -651,7 +761,7 @@ int main()
 							timedGameMusic.stop();
 
 							// creating new window
-							RenderWindow gameOverWindow(VideoMode(740, 480), "Game Over");
+							RenderWindow gameOverWindow(VideoMode(740, 490), "Game Over");
 							gameOverWindow.setFramerateLimit(60);
 
 							// creating sprite for back button
@@ -672,12 +782,18 @@ int main()
 
 							// gameover audio
 							Music gameOverMusic;
+<<<<<<< Updated upstream
+							
+							if (!(gameOverMusic.openFromFile("assets/audio/faint-courage-toby-fox.mp3")))
+=======
 
-							if (!(gameOverMusic.openFromFile("assets/music/faint-courage-toby-fox.ogg")))
+							if (!(gameOverMusic.openFromFile("assets/audio/faint-courage-toby-fox.ogg")))
+>>>>>>> Stashed changes
 								return -1;
-
+							
 							gameOverMusic.play();
 							gameOverMusic.setVolume(50);
+							gameOverMusic.setLoop(true);
 
 							// Game loop
 							while (gameOverWindow.isOpen())
@@ -693,6 +809,9 @@ int main()
 										Vector2i mousePos = Mouse::getPosition(gameOverWindow);
 										if (backButton_sprite.getGlobalBounds().contains(mousePos.x, mousePos.y))
 										{
+											clickSound.setBuffer(click_nav_buffer);
+											clickSound.play();
+
 											gameOverWindow.close();
 											gameOverMusic.stop();
 											main();
@@ -720,40 +839,50 @@ int main()
 						// Loading progress bars
 						for (int i = 0; i < 7; i++)
 						{
-							barBase_textures[i].loadFromFile("assets/textures/progress_base.png");
-							barOverlay_textures[i].loadFromFile("assets/textures/pb_fill.png");
-							barSpecies_textures[i].loadFromFile("assets/textures/animals.png");
+							barBase_textures[i].loadFromFile("assets/progress_base.png");
+							barOverlay_textures[i].loadFromFile("assets/pb_fill.png");
+							barSpecies_textures[i].loadFromFile("assets/animals.png");
 						}
 
 						// Creating sprites using loaded textures
 						Sprite *speciesSprites = new Sprite[7];
-						Sprite *progressBarBaseSprites = new Sprite[7];
-						Sprite *progressBarOverlaySprites = new Sprite[7];
-
 						for (int i = 0; i < 7; i++)
-						{
 							speciesSprites[i] = Sprite(barSpecies_textures[i]);
+
+						Sprite *progressBarBaseSprites = new Sprite[7];
+						for (int i = 0; i < 7; i++)
 							progressBarBaseSprites[i] = Sprite(barBase_textures[i]);
+
+						Sprite *progressBarOverlaySprites = new Sprite[7];
+						for (int i = 0; i < 7; i++)
 							progressBarOverlaySprites[i] = Sprite(barOverlay_textures[i]);
-						}
 
 						// Setting progress bar base and bar size
 						for (int i = 0; i < 7; i++)
-						{
 							speciesSprites[i].setTextureRect(IntRect(49 * i, 0, 50, 50));
+
+						for (int i = 0; i < 7; i++)
 							progressBarBaseSprites[i].setTextureRect(IntRect(0, 0, 123, 24));
+
+						for (int i = 0; i < 7; i++)
 							progressBarOverlaySprites[i].setTextureRect(IntRect(0, 0, calcBarWidth(matchedCount[i], ((i * (-1000)) + 8000)), 20));
+<<<<<<< Updated upstream
+
+						// Close the window and Game if the player has collected all the species
+=======
 						}
 						
-						// Close the window and Game if the player has collected all the species
+						// Close the window and game if the player has collected all the species
+>>>>>>> Stashed changes
 						int speciesRepo[7] = {8000, 7000, 6000, 5000, 4000, 3000, 2000};
 
 						for (int i = 0; i < 7; i++)
 						{
-							// If the player has collected all the species, Game
+							// If the player has collected all the species
 							if (matchedCount[i] >= speciesRepo[i])
 							{
 								game_timed.close();
+								timedGameMusic.stop();
 
 								// geting the winning animal and showing it on the screen
 								Texture winningAnimal_texture;
@@ -761,7 +890,7 @@ int main()
 								Sprite winningAnimal_sprite(winningAnimal_texture);
 								winningAnimal_sprite.setTextureRect(IntRect(49 * i, 0, 50, 50));
 								winningAnimal_sprite.setPosition(342, 150);
-
+							
 								// drawing the final score
 								Text finalScoreText("Final Score: " + to_string(score), gameFont, 24);
 								finalScoreText.setFillColor(Color::White);
@@ -779,28 +908,53 @@ int main()
 								backButton_sprite.setPosition(335, 300);
 
 								// creating new window
-								RenderWindow winWindow(VideoMode(740, 480), "Final Score");
+								RenderWindow winWindow(VideoMode(740, 490), "Final Score");
 								winWindow.setFramerateLimit(60);
+<<<<<<< Updated upstream
+								
+=======
 
+								Music youWinMusic;
+								
+								if (!youWinMusic.openFromFile("assets/audio/tower-clear-new-super-mario-bros-wii-chiptune.ogg"))
+									return -1;
+								
+								youWinMusic.play();
+								youWinMusic.setVolume(100);
+
+>>>>>>> Stashed changes
 								// Game loop
 								while (winWindow.isOpen())
 								{
 									while (winWindow.pollEvent(gameEvent))
-									{
-										if (gameEvent.type == Event::Closed)
-											winWindow.close();
+								{
+									if (gameEvent.type == Event::Closed)
+										winWindow.close();
 
-										if (gameEvent.type == Event::MouseButtonReleased && gameEvent.mouseButton.button == Mouse::Left)
+									if (gameEvent.type == Event::MouseButtonReleased && gameEvent.mouseButton.button == Mouse::Left)
+									{
+										Vector2i mousePos = Mouse::getPosition(winWindow);
+										if (backButton_sprite.getGlobalBounds().contains(mousePos.x, mousePos.y))
 										{
+<<<<<<< Updated upstream
+											winWindow.close();
+											main();
+=======
 											Vector2i mousePos = Mouse::getPosition(winWindow);
 											if (backButton_sprite.getGlobalBounds().contains(mousePos.x, mousePos.y))
 											{
+												clickSound.setBuffer(click_nav_buffer);
+												clickSound.play();
+
+												youWinMusic.stop();
 												winWindow.close();
 												main();
 											}
+>>>>>>> Stashed changes
 										}
 									}
-
+								}
+									
 									// Drawing text
 									winWindow.draw(background_sprite);
 									winWindow.draw(finalScoreText);
@@ -809,32 +963,31 @@ int main()
 									winWindow.draw(winningAnimal_sprite);
 									winWindow.display();
 								}
+
+								main();
 							}
 						}
 
 						// Setting progress bars positions
 						for (int i = 0; i < 7; i++)
 						{
-							speciesSprites[i].setPosition(460, 50 + (60 * i));
-							progressBarBaseSprites[i].setPosition(535, (62 + (61 * (i - 0))));
-							progressBarOverlaySprites[i].setPosition(537, (64 + (61 * (i - 0))));
+							speciesSprites[i].setPosition(460, (55 + (60 * i)));
+							progressBarBaseSprites[i].setPosition(535, (67 + (61 * (i - 0))));
+							progressBarOverlaySprites[i].setPosition(537, (69 + (61 * (i - 0))));
 						}
 
 						// Drawing progress bars
 						for (int i = 0; i < 7; i++)
-						{
 							game_timed.draw(speciesSprites[i]);
+						for (int i = 0; i < 7; i++)
 							game_timed.draw(progressBarBaseSprites[i]);
+						for (int i = 0; i < 7; i++)
 							game_timed.draw(progressBarOverlaySprites[i]);
-						}
 
-						// Display cursor and window
 						game_timed.draw(cursor_sprite);
-
-						// Drawing game window
 						game_timed.display();
 
-						// deleting the dynamic arrays
+						// deleting dynamic arrays
 						delete[] speciesSprites;
 						delete[] progressBarBaseSprites;
 						delete[] progressBarOverlaySprites;
