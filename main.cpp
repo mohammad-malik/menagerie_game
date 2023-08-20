@@ -8,7 +8,7 @@ int main()
 	// Declaring textures
 	Texture menuBackground_texture, normalButton_texture, timedButton_texture, helpButton_texture, quitButton_texture;
 
-	menuBackground_texture.loadFromFile("assets/textures/Menu_Background.png");
+	menuBackground_texture.loadFromFile("assets/textures/menu_background.png");
 	normalButton_texture.loadFromFile("assets/textures/Normal.png");
 	timedButton_texture.loadFromFile("assets/textures/Timed.png");
 	helpButton_texture.loadFromFile("assets/textures/Help.png");
@@ -180,8 +180,8 @@ int main()
 					Texture bg_texture, animal_textures, cursor_texture, level_texture;
 					bg_texture.loadFromFile("assets/textures/background.png");
 					animal_textures.loadFromFile("assets/textures/animals.png");
-					cursor_texture.loadFromFile("assets/textures/cursor.png");
-					level_texture.loadFromFile("assets/textures/Level_Base.png");
+					cursor_texture.loadFromFile("assets/textures/selection_box.png");
+					level_texture.loadFromFile("assets/textures/level_base.png");
 
 					// Creating sprite
 					Sprite background_sprite(bg_texture), animal_sprite(animal_textures), cursor_sprite(cursor_texture), level_sprite(level_texture);
@@ -200,6 +200,7 @@ int main()
 
 					// Variables for detecting mouse click and calculating col and row of click tile
 					int column1, column2, row1, row2, clickNumber = 0, soundPlayed = 0, scoreLimit = 150;
+					float pitchIncrementer = 1.0f;
 					Vector2i position;
 
 					Music normalGameMusic;
@@ -257,7 +258,8 @@ int main()
 
 							}
 
-							normalGameMusic.setPitch(1.5f);
+							pitchIncrementer += 0.2f;
+							normalGameMusic.setPitch(pitchIncrementer);
 							normalGameMusic.play();
 
 							scoreLimit += 100 + (100 * level);
@@ -416,9 +418,6 @@ int main()
 						scoreText.setString("Score: " + to_string(score));
 						game_normal.draw(scoreText);
 
-						// Custom cursor position on mouse position
-						cursor_sprite.setPosition((Mouse::getPosition(game_normal)).x - 25, (Mouse::getPosition(game_normal)).y - 25);
-
 						// Displaying progress bars
 						Texture barBase_textures[7];
 						Texture barOverlay_textures[7];
@@ -555,6 +554,21 @@ int main()
 						for (int i = 0; i < 7; i++)
 							game_normal.draw(progressBarOverlaySprites[i]);
 
+						// if the mouse cursor hovers over a tile, draw the cursor sprite on top of the tile
+						if (game_normal.hasFocus())
+						{
+							Vector2i mousePos = Mouse::getPosition(game_normal);
+							int column = mousePos.x / tileSize;
+							int row = mousePos.y / tileSize;
+
+							if ((column >= 0 && column < 8) && (row >= 0 && row <= 8))
+								cursor_sprite.setPosition((column * tileSize) + 5, (row * tileSize) + 5);
+							else
+								cursor_sprite.setPosition(-100, -100); // move the sprite off-screen
+						}
+						else
+							cursor_sprite.setPosition(-100, -100); // move the sprite off-screen if the window doesn't have focus
+
 						game_normal.draw(cursor_sprite);
 						game_normal.display();
 
@@ -597,8 +611,8 @@ int main()
 					Texture bg_texture, animal_textures, cursor_texture, level_texture;
 					bg_texture.loadFromFile("assets/textures/background.png");
 					animal_textures.loadFromFile("assets/textures/animals.png");
-					cursor_texture.loadFromFile("assets/textures/cursor.png");
-					level_texture.loadFromFile("assets/textures/Level_Base.png");
+					cursor_texture.loadFromFile("assets/textures/selection_box.png");
+					level_texture.loadFromFile("assets/textures/level_base.png");
 
 					// Creating sprite
 					Sprite background_sprite(bg_texture), animal_sprite(animal_textures), cursor_sprite(cursor_texture), timerBackground_sprite(level_texture);
@@ -817,9 +831,6 @@ int main()
 							}
 						}
 
-						// Custom cursor position on mouse position
-						cursor_sprite.setPosition((Mouse::getPosition(game_timed)).x - 25, (Mouse::getPosition(game_timed)).y - 25);
-
 						// Displaying progress bars
 						Texture barBase_textures[7];
 						Texture barOverlay_textures[7];
@@ -955,6 +966,21 @@ int main()
 							game_timed.draw(progressBarBaseSprites[i]);
 						for (int i = 0; i < 7; i++)
 							game_timed.draw(progressBarOverlaySprites[i]);
+
+						// if the mouse cursor hovers over a tile, draw the cursor sprite on top of the tile
+						if (game_timed.hasFocus())
+						{
+							Vector2i mousePos = Mouse::getPosition(game_timed);
+							int column = mousePos.x / tileSize;
+							int row = mousePos.y / tileSize;
+
+							if ((column >= 0 && column < 8) && (row >= 0 && row <= 8))
+								cursor_sprite.setPosition((column * tileSize) + 5, (row * tileSize) + 5);
+							else
+								cursor_sprite.setPosition(-100, -100); // move the sprite off-screen
+						}
+						else
+							cursor_sprite.setPosition(-100, -100); // move the sprite off-screen if the window doesn't have focus
 
 						game_timed.draw(cursor_sprite);
 						game_timed.display();
