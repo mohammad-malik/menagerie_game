@@ -696,9 +696,11 @@ int main()
 						int minutes = seconds / 60;
 						seconds = seconds % 60;
 
-						if (seconds < 30 && minutes == 0)
+						if (seconds <= 30 && minutes == 0)
+						{
+							timerText.setFillColor(Color::Red);
 							timedGameMusic.setPitch(1.5f);
-
+						}
 						string secondsString = to_string(seconds);
 						if (seconds < 10)
 							secondsString = "0" + secondsString;
