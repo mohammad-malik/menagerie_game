@@ -16,4 +16,4 @@ This is a game of Menagerie built in C++ using SFML/Graphics.
 
 <h2> Demonstration Video: </h2>
 
-[![YouTube video demonstration](https://img.youtube.com/vi/CN2f106_8jU/0.jpg)](https://www.youtube.com/embed/CN2f106_8jU)
+[![YouTube video demonstration](https://img.youtube.com/vi/CN2f106_8jU/0.jpg)](https://www.youtube.com/watch?v=CN2f106_8jU)
