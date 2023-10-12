@@ -7,20 +7,11 @@ int main()
 
 	// Declaring textures
 	Texture menuBackground_texture, normalButton_texture, timedButton_texture, helpButton_texture, quitButton_texture;
-
-	menuBackground_texture.loadFromFile("assets/textures/menu_background.png");
-	normalButton_texture.loadFromFile("assets/textures/Normal.png");
-	timedButton_texture.loadFromFile("assets/textures/Timed.png");
-	helpButton_texture.loadFromFile("assets/textures/Help.png");
-	quitButton_texture.loadFromFile("assets/textures/Quit.png");
+	initializeTextures(menuBackground_texture, normalButton_texture, timedButton_texture, helpButton_texture, quitButton_texture);
 
 	// Creating sprites
 	Sprite menu_background(menuBackground_texture), normalButton_sprite(normalButton_texture), timedButton_sprite(timedButton_texture), helpButton_sprite(helpButton_texture), quitButton_sprite(quitButton_texture);
-
-	normalButton_sprite.setPosition(309, 200);
-	timedButton_sprite.setPosition(323, 250);
-	helpButton_sprite.setPosition(333, 300);
-	quitButton_sprite.setPosition(336, 350);
+	initializeSprites(normalButton_sprite, timedButton_sprite, helpButton_sprite, quitButton_sprite);
 
 	// Load music file
 	Music mainMenuMusic;
@@ -33,12 +24,7 @@ int main()
 	mainMenuMusic.play();
 
 	SoundBuffer click1_buffer, click2_buffer, click_incorrect_buffer, click_match_buffer, click_nav_buffer;
-	click1_buffer.loadFromFile("assets/audio/click1.ogg");
-	click2_buffer.loadFromFile("assets/audio/click2.ogg");
-	click_incorrect_buffer.loadFromFile("assets/audio/invalidMatch.ogg");
-	click_match_buffer.loadFromFile("assets/audio/click2.ogg");
-	click_nav_buffer.loadFromFile("assets/audio/navClick.ogg");
-
+	initializeSoundBuffers(click1_buffer, click2_buffer, click_incorrect_buffer, click_match_buffer, click_nav_buffer);
 	Sound clickSound(click_nav_buffer);
 
 	// Initiates event checker
@@ -284,7 +270,6 @@ int main()
 
 						// Deducing row and col using coords for second click
 						case 2:
-
 							column2 = position.x / tileSize;
 							row2 = position.y / tileSize;
 
@@ -738,13 +723,14 @@ int main()
 						game_timed.draw(timerBackground_sprite);
 
 						elapsedTime = gameClock.getElapsedTime();
-						int seconds = 120 - elapsedTime.asSeconds();
+						int seconds = 31 - elapsedTime.asSeconds();
 						int minutes = seconds / 60;
 						seconds = seconds % 60;
 
-						if (seconds <= 30 && minutes == 0)
+						if (seconds <= 120 && minutes == 0)
 						{
-							timerText.setFillColor(Color::Red);
+							Color customColor(255, 110, 110, 255);
+							timerText.setFillColor(customColor);
 							timedGameMusic.setPitch(1.5f);
 						}
 						string secondsString = to_string(seconds);

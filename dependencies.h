@@ -5,6 +5,32 @@
 using namespace sf;
 using namespace std;
 
+void initializeTextures(Texture &menuBackground_texture, Texture &normalButton_texture, Texture &timedButton_texture, Texture &helpButton_texture, Texture &quitButton_texture)
+{
+	menuBackground_texture.loadFromFile("assets/textures/menu_background.png");
+	normalButton_texture.loadFromFile("assets/textures/Normal.png");
+	timedButton_texture.loadFromFile("assets/textures/Timed.png");
+	helpButton_texture.loadFromFile("assets/textures/Help.png");
+	quitButton_texture.loadFromFile("assets/textures/Quit.png");
+}
+
+void initializeSprites(Sprite &normalButton_sprite, Sprite &timedButton_sprite, Sprite &helpButton_sprite, Sprite &quitButton_sprite)
+{
+	normalButton_sprite.setPosition(309, 200);
+	timedButton_sprite.setPosition(323, 250);
+	helpButton_sprite.setPosition(333, 300);
+	quitButton_sprite.setPosition(336, 350);
+}
+
+void initializeSoundBuffers(SoundBuffer &click1_buffer, SoundBuffer &click2_buffer, SoundBuffer &click_incorrect_buffer, SoundBuffer &click_match_buffer, SoundBuffer &click_nav_buffer)
+{
+	click1_buffer.loadFromFile("assets/audio/click1.ogg");
+	click2_buffer.loadFromFile("assets/audio/click2.ogg");
+	click_incorrect_buffer.loadFromFile("assets/audio/invalidMatch.ogg");
+	click_match_buffer.loadFromFile("assets/audio/click2.ogg");
+	click_nav_buffer.loadFromFile("assets/audio/navClick.ogg");
+}
+
 int absVal(int value)
 {
 	// returning absolute value
