@@ -13,3 +13,7 @@ This is a game of Menagerie built in C++ using SFML/Graphics.
 <li> A Linux terminal environment (WSL works too)</li>
 <li> SFML (libsfml-dev) </li>
 <li> Makefile (or alternatively, run the four commands in the makefile) </li>
+
+<h2> Demonstration Video: </h2>
+
+[![YouTube video demonstration](https://img.youtube.com/vi/CN2f106_8jU/0.jpg)](https://www.youtube.com/watch?v=CN2f106_8jU)
