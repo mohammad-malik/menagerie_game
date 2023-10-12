@@ -723,7 +723,7 @@ int main()
 						game_timed.draw(timerBackground_sprite);
 
 						elapsedTime = gameClock.getElapsedTime();
-						int seconds = 31 - elapsedTime.asSeconds();
+						int seconds = 121 - elapsedTime.asSeconds();
 						int minutes = seconds / 60;
 						seconds = seconds % 60;
 
