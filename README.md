@@ -14,6 +14,14 @@ This is a game of Menagerie built in C++ using SFML/Graphics.
 <li> SFML (libsfml-dev) </li>
 <li> Makefile (or alternatively, run the four commands in the makefile) </li>
 
+
 <h2> Demonstration Video: </h2>
 
 [![YouTube video demonstration](https://img.youtube.com/vi/CN2f106_8jU/0.jpg)](https://www.youtube.com/watch?v=CN2f106_8jU)
+
+
+<h2> Contributors: </h2>
+<p> This project solely exists due to the countless hours (12) put in collaboration with:</p>
+<li> Ammar Kashif (www.github.com/ammarkas) </li>
+<li> Arhum Khan (www.github.com/Arhum-Khan10)</li>
+<li> Muneeb Anjum (www.github.com/muneeb-anjum0)</li>
