@@ -22,8 +22,8 @@ This is a game of Menagerie built in C++ using SFML/Graphics.
 [![YouTube video demonstration](https://img.youtube.com/vi/CN2f106_8jU/0.jpg)](https://www.youtube.com/watch?v=CN2f106_8jU)
 
 
-<h2> Contributors: </h2>
-<p> This project solely exists due to the work put in through collaboration with:</p>
-<li> Ammar Kashif: www.github.com/ammarkas</li>
-<li> Arhum Khan: www.github.com/Arhum-Khan10</li>
+<h2> Team: </h2>
+<li> Mohammad Malik: www.github.com/mohammad-malik</li>
+<li> Ammar Kashif: www.github.com/ammar-kashif</li>
+<li> Arhum Khan: www.github.com/ArhumKhan10</li>
 <li> Muneeb Anjum: www.github.com/muneeb-anjum0</li>
